@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Page = {
   title: string;
   path: `/${string}`;
@@ -38,7 +40,7 @@ const pages: Page[] = [
 function processPage(page: Page, index: number) {
   return (
     <li key={index}>
-      <a href={page.path}>{page.title}</a>
+      <Link href={page.path}>{page.title}</Link>
     </li>
   );
 }
