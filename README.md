@@ -1,5 +1,5 @@
 # Building Your Application
 
-Getting Started > [**Project Structure**](https://nextjs.org/docs/app/getting-started/project-structure)
+Getting Started > [**Linking and Navigating**](https://nextjs.org/docs/app/getting-started/linking-and-navigating)
 
-Getting Started > [**Layouts and Pages (Routing)**](https://nextjs.org/docs/app/getting-started/layouts-and-pages)
+Components > [**Link Component**](https://nextjs.org/docs/app/api-reference/components/link)
