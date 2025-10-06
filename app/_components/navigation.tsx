@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type Page = {
   title: string;
@@ -37,18 +40,26 @@ const pages: Page[] = [
  * @param index - array index used for key
  * @returns JSX element for a list item
  */
-function processPage(page: Page, index: number) {
+function processPage(page: Page, index: number, currentPath?: string) {
   return (
     <li key={index}>
-      <Link href={page.path}>{page.title}</Link>
+      <Link
+        href={page.path}
+        className={currentPath === page.path ? "font-extrabold" : ""}
+      >
+        {page.title}
+      </Link>
     </li>
   );
 }
 
 export function Navigation() {
+  const currentPath = usePathname();
   return (
     <nav>
-      <ul className="flex space-x-4 mb-4">{pages.map(processPage)}</ul>
+      <ul className="flex space-x-4 mb-4">
+        {pages.map((page, index) => processPage(page, index, currentPath))}
+      </ul>
     </nav>
   );
 }
