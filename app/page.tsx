@@ -43,10 +43,18 @@ function processPage(page: Page, index: number) {
   );
 }
 
+export function Navigation() {
+  return (
+    <nav>
+      <ul className="flex space-x-4 mb-4">{pages.map(processPage)}</ul>
+    </nav>
+  );
+}
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
-      <ul className="flex space-x-4 mb-4">{pages.map(processPage)}</ul>
+      <Navigation />
       <h1 className="text-6xl font-extrabold tracking-tight">Home page</h1>
     </main>
   );
