@@ -57,7 +57,7 @@ export function Navigation() {
   const currentPath = usePathname();
   return (
     <nav>
-      <ul className="flex space-x-4 mb-4">
+      <ul className="flex space-x-4">
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
     </nav>
