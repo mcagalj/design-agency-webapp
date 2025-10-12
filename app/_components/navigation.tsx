@@ -41,12 +41,17 @@ const pages: Page[] = [
  * @returns JSX element for a list item
  */
 function processPage(page: Page, index: number, currentPath?: string) {
+  // Check if the current path matches the page path
+  // For home page ("/"), use exact match to avoid matching all routes
+  // For other pages, check if current path starts with the page path to support nested routes
+  const isActive =
+    page.path === "/"
+      ? currentPath === page.path
+      : currentPath?.startsWith(page.path);
+
   return (
     <li key={index}>
-      <Link
-        href={page.path}
-        className={currentPath === page.path ? "font-extrabold" : ""}
-      >
+      <Link href={page.path} className={isActive ? "font-extrabold" : ""}>
         {page.title}
       </Link>
     </li>
