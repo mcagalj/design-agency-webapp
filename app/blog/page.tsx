@@ -1,35 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+interface BlogPostProps {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
+
 export const metadata: Metadata = {
   title: "Blog",
 };
 
-// This is typically fetched from an API
-const posts = [
-  {
-    id: 12,
-    title: "Getting Started with Next.js",
-  },
-  {
-    id: 3,
-    title: "Understanding Dynamic Routes",
-  },
-  {
-    id: 56,
-    title: "Building Modern Web Apps",
-  },
-  {
-    id: 7,
-    title: "TypeScript Best Practices",
-  },
-  {
-    id: 89,
-    title: "Performance Optimization Tips",
-  },
-];
+const BASE_API_URL = "https://jsonplaceholder.typicode.com";
 
-function processPost(post: (typeof posts)[0]) {
+async function fetchPosts(): Promise<BlogPostProps[]> {
+  const response = await fetch(`${BASE_API_URL}/posts`);
+  return response.json();
+}
+
+function processPost(post: BlogPostProps) {
   return (
     <li key={post.id} className="list-none">
       <Link
@@ -42,7 +32,7 @@ function processPost(post: (typeof posts)[0]) {
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-lg text-gray-900 mb-0.5">
+            <h3 className="font-semibold capitalize text-lg text-gray-900 mb-0.5">
               {post.title}
             </h3>
             <p className="text-sm text-gray-500">Post #{post.id}</p>
@@ -58,7 +48,9 @@ function processPost(post: (typeof posts)[0]) {
   );
 }
 
-export default function Page() {
+export default async function Page() {
+  const posts = await fetchPosts();
+
   return (
     <main>
       <div className="container mx-auto px-4 py-12">
