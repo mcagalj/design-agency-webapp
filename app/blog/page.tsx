@@ -1,7 +1,8 @@
+import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-interface BlogPostProps {
+export interface BlogPostProps {
   userId: number;
   id: number;
   title: string;
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: "Blog",
 };
 
-const BASE_API_URL = "https://jsonplaceholder.typicode.com";
+export const BASE_API_URL = "https://jsonplaceholder.typicode.com";
 
 async function fetchPosts(): Promise<BlogPostProps[]> {
   const response = await fetch(`${BASE_API_URL}/posts`);
@@ -39,9 +40,7 @@ function processPost(post: BlogPostProps) {
           </div>
 
           {/* Arrow */}
-          <div className="flex-shrink-0 text-gray-400 group-hover:text-gray-700 transition-colors">
-            <span className="text-xl">→</span>
-          </div>
+          <ArrowRight className="mr-2 h-4 w-4 text-gray-600 group-hover:text-gray-900 transition-colors duration-200" />
         </div>
       </Link>
     </li>
