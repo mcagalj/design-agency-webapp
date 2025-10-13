@@ -8,8 +8,8 @@ interface BlogPostProps {
 //   params: { id: string };
 // };
 
-export default function BlogPost({ params }: BlogPostProps) {
-  const { id } = params;
+export default async function BlogPost({ params }: BlogPostProps) {
+  const { id } = await params;
 
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
