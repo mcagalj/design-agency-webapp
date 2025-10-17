@@ -1,6 +1,8 @@
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Pagination } from "../_components/Pagination";
+import { notFound } from "next/navigation";
 
 export interface BlogPostProps {
   userId: number;
@@ -13,10 +15,28 @@ export const metadata: Metadata = {
   title: "Blog",
 };
 
+const PAGE_SIZE = 6;
 export const BASE_API_URL = "https://jsonplaceholder.typicode.com";
 
-async function fetchPosts(): Promise<BlogPostProps[]> {
-  const response = await fetch(`${BASE_API_URL}/posts`);
+// Get the total number of posts; please note this feature is JSONPlaceholder API specific.
+async function getPostsCount(): Promise<number> {
+  // https://jsonplaceholder.typicode.com/posts/?_start=5&_limit=8
+  const data = await fetch(`${BASE_API_URL}/posts/?_limit=1`, {
+    method: "HEAD",
+  });
+  const count = data.headers.get("x-total-count") || "1";
+  return parseInt(count, 10);
+}
+
+// Fetch paginated posts
+async function fetchPosts(
+  page: number,
+  pageSize: number
+): Promise<BlogPostProps[]> {
+  const start = (page - 1) * pageSize;
+  const response = await fetch(
+    `${BASE_API_URL}/posts?_start=${start}&_limit=${pageSize}`
+  );
   return response.json();
 }
 
@@ -47,8 +67,22 @@ function processPost(post: BlogPostProps) {
   );
 }
 
-export default async function Page() {
-  const posts = await fetchPosts();
+interface BlogPageSearchParams {
+  searchParams?: {
+    page?: string;
+  };
+}
+
+export default async function Page({ searchParams }: BlogPageSearchParams) {
+  const params = await searchParams;
+  console.log("searchParams:", params);
+
+  const pageStr = params?.page ?? "1";
+  const page = Math.max(1, parseInt(pageStr, 10));
+  const totalPosts = await getPostsCount();
+  const totalPages = Math.max(1, Math.ceil(totalPosts / PAGE_SIZE));
+  if (page > totalPages) notFound();
+  const posts = await fetchPosts(page, PAGE_SIZE);
 
   return (
     <main>
@@ -61,11 +95,18 @@ export default async function Page() {
             </h1>
             <p className="text-gray-600 text-lg">Explore posts below</p>
           </div>
-
           {/* Blog Posts Grid */}
           <div className="space-y-4">
             <ul className="space-y-3">{posts.map(processPost)}</ul>
           </div>
+          {/* Pagination */}
+          <div className="flex justify-center mt-8">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              generatePageHref={(p) => `/blog?page=${p}`}
+            />
+          </div>{" "}
         </div>
       </div>
     </main>
