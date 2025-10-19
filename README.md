@@ -1,1 +1,1 @@
-[Type-safe search params state manager for React (nuqs)](https://nuqs.dev)
+Guides > [How to use environment variables in Next.js](https://nextjs.org/docs/app/guides/environment-variables)
