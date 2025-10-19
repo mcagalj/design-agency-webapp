@@ -14,6 +14,13 @@ export const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   className = "",
 }) => {
+  const BASE_API_URL = process.env.BASE_API_URL;
+  console.log("BASE_API_URL in Pagination (a client component):", BASE_API_URL);
+  console.log(
+    "NEXT_PUBLIC_BASE_API_URL in Pagination (a client component):",
+    process.env.NEXT_PUBLIC_BASE_API_URL
+  );
+
   const [, setPage] = useQueryState(
     "page",
     parseAsInteger.withDefault(1).withOptions({ shallow: false })
