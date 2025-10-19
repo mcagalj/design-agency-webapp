@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "./_components/navigation";
@@ -33,7 +34,9 @@ export default function RootLayout({
             <Navigation />
           </div>
         </header>
-        <main className="pt-20">{children}</main>
+        <main className="pt-20">
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </main>
       </body>
     </html>
   );

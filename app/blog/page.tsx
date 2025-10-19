@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Pagination } from "../_components/Pagination";
+import { BlogFilters } from "./_components/BlogFilters";
 import { notFound } from "next/navigation";
 
 export interface BlogPostProps {
@@ -50,7 +51,15 @@ async function fetchPosts(
   return response.json();
 }
 
-function processPost(post: BlogPostProps) {
+// Fetch users
+async function fetchUsers(): Promise<{ id: number; name: string }[]> {
+  const response = await fetch(`${BASE_API_URL}/users`, {
+    next: { revalidate: 60 },
+  });
+  return response.json();
+}
+
+function processPost(post: BlogPostProps, userName?: string) {
   return (
     <li key={post.id} className="list-none">
       <Link
@@ -67,7 +76,7 @@ function processPost(post: BlogPostProps) {
               {post.title}
             </h3>
             <p className="text-sm text-gray-500">
-              Post #{post.id} by User #{post.userId}
+              Post #{post.id} by {userName || `User ${post.userId}`}
             </p>
           </div>
 
@@ -85,11 +94,16 @@ interface BlogPageSearchParams {
 
 export default async function Page({ searchParams }: BlogPageSearchParams) {
   const { page, userId } = await loadBlogSearchParams(searchParams);
-  console.log("page:", page, "userId:", userId);
+  console.log({ userId, page });
+  // Not used, just for console logging
   const params = await searchParams;
   console.log("searchParams:", params);
 
-  const totalPosts = await getPostsCount(userId > 0 ? userId : undefined);
+  // Fetch users and total posts count in parallel
+  const [users, totalPosts] = await Promise.all([
+    fetchUsers(),
+    getPostsCount(userId > 0 ? userId : undefined),
+  ]);
   const totalPages = Math.max(1, Math.ceil(totalPosts / PAGE_SIZE));
   if (page > totalPages) notFound();
   const posts = await fetchPosts(
@@ -97,6 +111,10 @@ export default async function Page({ searchParams }: BlogPageSearchParams) {
     PAGE_SIZE,
     userId > 0 ? userId : undefined
   );
+
+  // Create a map of userId to userName (post author name)
+  // (if authors do not change frequently, this could be cached globally)
+  const userMap = new Map(users.map((user) => [user.id, user.name]));
 
   return (
     <main>
@@ -109,21 +127,17 @@ export default async function Page({ searchParams }: BlogPageSearchParams) {
             </h1>
             <p className="text-gray-600 text-lg">Explore posts below</p>
           </div>
+          {/* Filters */}
+          <BlogFilters users={users} currentUserId={userId} />
           {/* Blog Posts Grid */}
           <div className="space-y-4">
-            <ul className="space-y-3">{posts.map(processPost)}</ul>
+            <ul className="space-y-3">
+              {posts.map((post) => processPost(post, userMap.get(post.userId)))}
+            </ul>
           </div>
           {/* Pagination */}
           <div className="flex justify-center mt-8">
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              generatePageHref={(p) =>
-                userId > 0
-                  ? `/blog?page=${p}&userId=${userId}`
-                  : `/blog?page=${p}`
-              }
-            />
+            <Pagination currentPage={page} totalPages={totalPages} />
           </div>
         </div>
       </div>
