@@ -1,3 +1,5 @@
+import { loadBlogSearchParams } from "@/lib/blog-search-params";
+import type { SearchParams } from "nuqs/server";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -19,9 +21,13 @@ const PAGE_SIZE = 6;
 export const BASE_API_URL = "https://jsonplaceholder.typicode.com";
 
 // Get the total number of posts; please note this feature is JSONPlaceholder API specific.
-async function getPostsCount(): Promise<number> {
+async function getPostsCount(userId?: number): Promise<number> {
   // https://jsonplaceholder.typicode.com/posts/?_start=5&_limit=8
-  const data = await fetch(`${BASE_API_URL}/posts/?_limit=1`, {
+  const url =
+    userId && userId > 0
+      ? `${BASE_API_URL}/posts/?userId=${userId}&_limit=1`
+      : `${BASE_API_URL}/posts/?_limit=1`;
+  const data = await fetch(url, {
     method: "HEAD",
     next: { revalidate: 60 },
   });
@@ -32,11 +38,13 @@ async function getPostsCount(): Promise<number> {
 // Fetch paginated posts
 async function fetchPosts(
   page: number,
-  pageSize: number
+  pageSize: number,
+  userId?: number
 ): Promise<BlogPostProps[]> {
   const start = (page - 1) * pageSize;
+  const userQuery = userId && userId > 0 ? `&userId=${userId}` : "";
   const response = await fetch(
-    `${BASE_API_URL}/posts?_start=${start}&_limit=${pageSize}`,
+    `${BASE_API_URL}/posts?_start=${start}&_limit=${pageSize}${userQuery}`,
     { next: { revalidate: 60 } }
   );
   return response.json();
@@ -58,7 +66,9 @@ function processPost(post: BlogPostProps) {
             <h3 className="font-semibold capitalize text-lg text-gray-900 mb-0.5">
               {post.title}
             </h3>
-            <p className="text-sm text-gray-500">Post #{post.id}</p>
+            <p className="text-sm text-gray-500">
+              Post #{post.id} by User #{post.userId}
+            </p>
           </div>
 
           {/* Arrow */}
@@ -70,21 +80,23 @@ function processPost(post: BlogPostProps) {
 }
 
 interface BlogPageSearchParams {
-  searchParams?: {
-    page?: string;
-  };
+  searchParams: Promise<SearchParams>;
 }
 
 export default async function Page({ searchParams }: BlogPageSearchParams) {
+  const { page, userId } = await loadBlogSearchParams(searchParams);
+  console.log("page:", page, "userId:", userId);
   const params = await searchParams;
   console.log("searchParams:", params);
 
-  const pageStr = params?.page ?? "1";
-  const page = Math.max(1, parseInt(pageStr, 10));
-  const totalPosts = await getPostsCount();
+  const totalPosts = await getPostsCount(userId > 0 ? userId : undefined);
   const totalPages = Math.max(1, Math.ceil(totalPosts / PAGE_SIZE));
   if (page > totalPages) notFound();
-  const posts = await fetchPosts(page, PAGE_SIZE);
+  const posts = await fetchPosts(
+    page,
+    PAGE_SIZE,
+    userId > 0 ? userId : undefined
+  );
 
   return (
     <main>
@@ -106,7 +118,11 @@ export default async function Page({ searchParams }: BlogPageSearchParams) {
             <Pagination
               currentPage={page}
               totalPages={totalPages}
-              generatePageHref={(p) => `/blog?page=${p}`}
+              generatePageHref={(p) =>
+                userId > 0
+                  ? `/blog?page=${p}&userId=${userId}`
+                  : `/blog?page=${p}`
+              }
             />
           </div>
         </div>
