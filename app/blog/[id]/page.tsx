@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { BASE_API_URL } from "../page";
 import type { BlogPostProps as Post } from "../page";
 import { Suspense } from "react";
 
 interface BlogPostProps {
   params: { id: string };
 }
+
+const BASE_API_URL = process.env.BASE_API_URL;
 
 async function fetchPost(id: string): Promise<Post> {
   const response = await fetch(`${BASE_API_URL}/posts/${id}`);

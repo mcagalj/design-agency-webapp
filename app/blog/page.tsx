@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   title: "Blog",
 };
 
-const PAGE_SIZE = 6;
-export const BASE_API_URL = "https://jsonplaceholder.typicode.com";
+const PAGE_SIZE = parseInt(process.env.PAGE_SIZE || "5", 10);
+const BASE_API_URL = process.env.BASE_API_URL;
 
 // Get the total number of posts; please note this feature is JSONPlaceholder API specific.
 async function getPostsCount(userId?: number): Promise<number> {
