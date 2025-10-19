@@ -23,6 +23,7 @@ async function getPostsCount(): Promise<number> {
   // https://jsonplaceholder.typicode.com/posts/?_start=5&_limit=8
   const data = await fetch(`${BASE_API_URL}/posts/?_limit=1`, {
     method: "HEAD",
+    next: { revalidate: 60 },
   });
   const count = data.headers.get("x-total-count") || "1";
   return parseInt(count, 10);
@@ -35,7 +36,8 @@ async function fetchPosts(
 ): Promise<BlogPostProps[]> {
   const start = (page - 1) * pageSize;
   const response = await fetch(
-    `${BASE_API_URL}/posts?_start=${start}&_limit=${pageSize}`
+    `${BASE_API_URL}/posts?_start=${start}&_limit=${pageSize}`,
+    { next: { revalidate: 60 } }
   );
   return response.json();
 }
@@ -106,7 +108,7 @@ export default async function Page({ searchParams }: BlogPageSearchParams) {
               totalPages={totalPages}
               generatePageHref={(p) => `/blog?page=${p}`}
             />
-          </div>{" "}
+          </div>
         </div>
       </div>
     </main>
