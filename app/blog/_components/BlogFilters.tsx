@@ -4,10 +4,9 @@ import { useQueryState, parseAsInteger } from "nuqs";
 
 interface BlogFiltersProps {
   users: { id: number; name: string }[];
-  currentUserId: number;
 }
 
-export function BlogFilters({ users, currentUserId }: BlogFiltersProps) {
+export function BlogFilters({ users }: BlogFiltersProps) {
   const [userId, setUserId] = useQueryState(
     "userId",
     parseAsInteger.withDefault(0).withOptions({ shallow: false })
@@ -49,7 +48,7 @@ export function BlogFilters({ users, currentUserId }: BlogFiltersProps) {
         </select>
       </div>
 
-      {currentUserId > 0 && (
+      {userId !== 0 && (
         <button
           onClick={clearFilter}
           className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"

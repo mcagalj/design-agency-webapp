@@ -10,7 +10,9 @@ interface BlogPostProps {
 const BASE_API_URL = process.env.BASE_API_URL;
 
 async function fetchPost(id: string): Promise<Post> {
-  const response = await fetch(`${BASE_API_URL}/posts/${id}`);
+  const response = await fetch(`${BASE_API_URL}/posts/${id}`, {
+    next: { revalidate: 3600 },
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch post");
   }
