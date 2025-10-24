@@ -61,7 +61,12 @@ function processPage(page: Page, index: number, currentPath?: string) {
 export function Navigation() {
   const currentPath = usePathname();
   return (
-    <nav>
+    <nav className="flex justify-center items-baseline space-x-4 mt-8">
+      <p className="font-heading text-2xl font-black">
+        <span className="text-brand">design</span>
+        <span className="text-brand-text-strong">matters</span>
+        <span className="text-brand">.</span>
+      </p>
       <ul className="flex space-x-4">
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>

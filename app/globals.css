@@ -10,6 +10,15 @@
   --color-foreground: var(--foreground);
   --font-body: var(--font-inter);
   --font-heading: var(--font-lato);
+
+  /* === Brand Colors === */
+  --color-brand-black: #1a1a1a;
+  --color-brand: #4F46E5;
+  --color-brand-text-strong: #1C1A3D;
+  --color-brand-text-weak: #5B597A;
+  --color-brand-stroke-strong: #8685A6;
+  --color-brand-stroke-weak: #E1E0E5;
+  --color-brand-fill-bg: #F5F5FA;
 }
 
 @media (prefers-color-scheme: dark) {
