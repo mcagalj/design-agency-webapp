@@ -1,1 +1,5 @@
-Guides > [How to use environment variables in Next.js](https://nextjs.org/docs/app/guides/environment-variables)
+Getting Started > [**CSS**](https://nextjs.org/docs/app/getting-started/css)
+
+[**Tailwind CSS**](https://tailwindcss.com/)
+
+Getting Started > [**Font optimization**](https://nextjs.org/docs/app/getting-started/fonts)
