@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Lato } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "./_components/navigation";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  fallback: ["arial", "sans-serif"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const lato = Lato({
+  weight: ["400", "700", "900"],
   subsets: ["latin"],
+  variable: "--font-lato",
+  fallback: ["arial", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -27,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.className} ${inter.variable} ${lato.variable} antialiased`}
       >
         <header className="fixed top-0 left-0 right-0 z-50 border-b">
           <div className="container mx-auto py-4 flex justify-center">
