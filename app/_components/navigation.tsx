@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import Hamburger from "./Hamburger";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/cn";
 
 type Page = {
   title: string;
@@ -57,14 +58,12 @@ function processPage(page: Page, index: number, currentPath?: string) {
     <li key={index}>
       <Link href={page.path}>
         <span
-          className={twMerge(
-            clsx(
-              "border rounded-sm border-transparent px-4 py-3 whitespace-nowrap hover:text-white hover:bg-brand",
-              {
-                "text-brand border-brand": isActive,
-                border: isActive,
-              }
-            )
+          className={cn(
+            "border rounded-sm border-transparent px-4 py-3 whitespace-nowrap hover:text-white hover:bg-brand",
+            {
+              "text-brand border-brand": isActive,
+              border: isActive,
+            }
           )}
         >
           {page.title}
