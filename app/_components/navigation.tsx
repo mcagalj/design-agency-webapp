@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
+import Hamburger from "./Hamburger";
 
 type Page = {
   title: string;
@@ -62,13 +63,14 @@ function processPage(page: Page, index: number, currentPath?: string) {
 export function Navigation() {
   const currentPath = usePathname();
   return (
-    <nav className="flex justify-center items-baseline space-x-4 mt-8">
+    <nav className="flex justify-center items-center space-x-4 mt-8">
       <Link href="/">
         <Logo />
       </Link>
-      <ul className="flex space-x-4">
+      <ul className="hidden md:flex space-x-4">
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
+      <Hamburger />
     </nav>
   );
 }
