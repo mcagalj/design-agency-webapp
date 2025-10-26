@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Inter, Lato } from "next/font/google";
 import "./globals.css";
@@ -21,6 +21,11 @@ const lato = Lato({
 export const metadata: Metadata = {
   title: "designmatters.",
   description: "Design Matters - we care about your design needs.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1.0,
 };
 
 export default function RootLayout({
