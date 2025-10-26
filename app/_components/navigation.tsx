@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "./Logo";
 
 type Page = {
   title: string;
@@ -62,11 +63,8 @@ export function Navigation() {
   const currentPath = usePathname();
   return (
     <nav className="flex justify-center items-baseline space-x-4 mt-8">
-      <p className="font-heading text-2xl font-black">
-        <span className="text-brand">design</span>
-        <span className="text-brand-text-strong">matters</span>
-        <span className="text-brand">.</span>
-      </p>
+      <Logo />
+      <Logo theme="dark" />
       <ul className="flex space-x-4">
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
