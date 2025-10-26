@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import Hamburger from "./Hamburger";
+import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
 
 type Page = {
   title: string;
@@ -46,20 +48,24 @@ function processPage(page: Page, index: number, currentPath?: string) {
   // Check if the current path matches the page path
   // For home page ("/"), use exact match to avoid matching all routes
   // For other pages, check if current path starts with the page path to support nested routes
-  const activeStyle =
+  const isActive =
     page.path === "/"
       ? currentPath === page.path
-        ? "text-brand border rounded-sm border-brand"
-        : ""
-      : currentPath?.startsWith(page.path)
-      ? "text-brand border rounded-sm border-brand"
-      : "";
+      : currentPath?.startsWith(page.path);
 
   return (
     <li key={index}>
       <Link href={page.path}>
         <span
-          className={`border rounded-sm border-transparent px-4 py-3 whitespace-nowrap hover:text-white hover:bg-brand ${activeStyle}`}
+          className={twMerge(
+            clsx(
+              "border rounded-sm border-transparent px-4 py-3 whitespace-nowrap hover:text-white hover:bg-brand",
+              {
+                "text-brand border-brand": isActive,
+                border: isActive,
+              }
+            )
+          )}
         >
           {page.title}
         </span>
