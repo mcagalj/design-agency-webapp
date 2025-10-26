@@ -46,15 +46,23 @@ function processPage(page: Page, index: number, currentPath?: string) {
   // Check if the current path matches the page path
   // For home page ("/"), use exact match to avoid matching all routes
   // For other pages, check if current path starts with the page path to support nested routes
-  const isActive =
+  const activeStyle =
     page.path === "/"
       ? currentPath === page.path
-      : currentPath?.startsWith(page.path);
+        ? "text-brand border rounded-sm border-brand"
+        : ""
+      : currentPath?.startsWith(page.path)
+      ? "text-brand border rounded-sm border-brand"
+      : "";
 
   return (
     <li key={index}>
-      <Link href={page.path} className={isActive ? "font-extrabold" : ""}>
-        {page.title}
+      <Link href={page.path}>
+        <span
+          className={`border rounded-sm border-transparent px-4 py-3 whitespace-nowrap hover:text-white hover:bg-brand ${activeStyle}`}
+        >
+          {page.title}
+        </span>
       </Link>
     </li>
   );
@@ -62,12 +70,13 @@ function processPage(page: Page, index: number, currentPath?: string) {
 
 export function Navigation() {
   const currentPath = usePathname();
+
   return (
     <nav className="flex justify-center items-center space-x-4 mt-8">
       <Link href="/">
         <Logo />
       </Link>
-      <ul className="hidden md:flex space-x-4">
+      <ul className="hidden md:flex justify-between space-x-4 text-sm uppercase text-brand-text-strong">
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
       <Hamburger />
