@@ -62,7 +62,6 @@ function processPage(page: Page, index: number, currentPath?: string) {
             "border rounded-sm border-transparent px-4 py-3 whitespace-nowrap hover:text-white hover:bg-brand",
             {
               "text-brand border-brand": isActive,
-              border: isActive,
             }
           )}
         >
