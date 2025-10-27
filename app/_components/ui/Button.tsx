@@ -23,8 +23,8 @@ const Button = ({
     <button
       className={cn(
         "transition duration-300 ease-in-out",
-        "group flex items-baseline space-x-2 max-w-min whitespace-nowrap",
-        "px-6 py-3 rounded-sm font-lato font-medium",
+        "group flex items-center space-x-2 max-w-min whitespace-nowrap",
+        "px-6 py-3 rounded-sm font-heading font-medium",
         "bg-brand-stroke-weak text-brand-black",
         {
           "bg-brand text-white": secondary,
