@@ -37,13 +37,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${inter.variable} ${lato.variable} antialiased`}
+        className={`${inter.className} ${inter.variable} ${lato.variable} antialiased bg-brand-fill-bg`}
       >
         <AuthProvider>
           <header className="fixed top-0 left-0 right-0 z-50 bg-brand-fill-bg border-b border-brand-stroke-weak">
             <Navigation />
           </header>
-          <main className="pt-20">
+          <main className="pt-28">
             <NuqsAdapter>{children}</NuqsAdapter>
           </main>
         </AuthProvider>
