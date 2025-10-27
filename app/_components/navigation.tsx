@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import Hamburger from "./Hamburger";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
+import { useAuth } from "../_context/AuthContext";
 
 type Page = {
   title: string;
@@ -75,7 +76,13 @@ export function Navigation() {
   const currentPath = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((prev) => !prev);
-  console.log("Navigation render: isOpen =", isOpen);
+  const { user, login, logout } = useAuth();
+
+  // Demo login handler
+  const handleLogin = () => {
+    login({ username: "jdoe", email: "jdoe@example.com" });
+  };
+
   return (
     <nav className="flex flex-1 justify-between items-center p-8">
       <Link href="/">
@@ -84,7 +91,27 @@ export function Navigation() {
       <ul className="hidden md:flex justify-between space-x-4 text-sm uppercase text-brand-text-strong">
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
-      <Hamburger isOpen={isOpen} onClick={toggleMenu} />
+      <div className="flex items-center space-x-4">
+        {user ? (
+          <>
+            <span className="text-normal text-brand">{user.username}</span>
+            <button
+              className="px-2 py-2 uppercase text-normal rounded bg-brand text-white hover:bg-brand-stroke-strong"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            className="px-2 py-2 uppercase text-normal rounded bg-brand text-white hover:bg-brand-stroke-strong"
+            onClick={handleLogin}
+          >
+            Login
+          </button>
+        )}
+        <Hamburger isOpen={isOpen} onClick={toggleMenu} />
+      </div>
     </nav>
   );
 }
