@@ -84,10 +84,11 @@ export function Navigation() {
   };
 
   return (
-    <nav className="flex flex-1 justify-between items-center p-8">
+    <nav className="flex flex-1 justify-between items-center p-8 border-b border-brand-stroke-weak">
       <Link href="/">
         <Logo />
       </Link>
+      {/* Hidden on mobile */}
       <ul className="hidden md:flex justify-between space-x-4 text-sm uppercase text-brand-text-strong">
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
@@ -110,7 +111,16 @@ export function Navigation() {
             Login
           </button>
         )}
+        {/* Visible on mobile */}
         <Hamburger isOpen={isOpen} onClick={toggleMenu} />
+        <ul
+          className={cn(
+            "flex md:hidden flex-col absolute top-full left-0 items-center w-full bg-brand-fill-bg p-8 space-y-8 text-sm uppercase text-brand-text-strong border-b border-brand-stroke-weak",
+            { hidden: !isOpen }
+          )}
+        >
+          {pages.map((page, index) => processPage(page, index, currentPath))}
+        </ul>
       </div>
     </nav>
   );

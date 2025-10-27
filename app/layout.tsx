@@ -40,7 +40,7 @@ export default function RootLayout({
         className={`${inter.className} ${inter.variable} ${lato.variable} antialiased`}
       >
         <AuthProvider>
-          <header className="fixed top-0 left-0 right-0 z-50 border-b">
+          <header className="fixed top-0 left-0 right-0 z-50 bg-brand-fill-bg border-b border-brand-stroke-weak">
             <Navigation />
           </header>
           <main className="pt-20">
