@@ -39,9 +39,7 @@ export default function RootLayout({
         className={`${inter.className} ${inter.variable} ${lato.variable} antialiased`}
       >
         <header className="fixed top-0 left-0 right-0 z-50 border-b">
-          <div className="container mx-auto py-4 flex justify-center">
-            <Navigation />
-          </div>
+          <Navigation />
         </header>
         <main className="pt-20">
           <NuqsAdapter>{children}</NuqsAdapter>

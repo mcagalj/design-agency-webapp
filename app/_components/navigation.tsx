@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import Hamburger from "./Hamburger";
-import clsx from "clsx";
-import { twMerge } from "tailwind-merge";
+import { useState } from "react";
 import { cn } from "@/lib/cn";
 
 type Page = {
@@ -74,16 +73,18 @@ function processPage(page: Page, index: number, currentPath?: string) {
 
 export function Navigation() {
   const currentPath = usePathname();
-
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = () => setIsOpen((prev) => !prev);
+  console.log("Navigation render: isOpen =", isOpen);
   return (
-    <nav className="flex justify-center items-center space-x-4 mt-8">
+    <nav className="flex flex-1 justify-between items-center p-8">
       <Link href="/">
         <Logo />
       </Link>
       <ul className="hidden md:flex justify-between space-x-4 text-sm uppercase text-brand-text-strong">
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
-      <Hamburger />
+      <Hamburger isOpen={isOpen} onClick={toggleMenu} />
     </nav>
   );
 }
