@@ -1,5 +1,6 @@
 import HelloBanner from "./_components/HelloBanner";
 import Button from "./_components/ui/Button";
+import Image from "next/image";
 
 // Here we hardcode the content of the home page, but in a real-world scenario, this content would be fetched from a CMS or a DB.
 export default function Home() {
@@ -27,7 +28,14 @@ export default function Home() {
         <h1 className="container text-3xl font-heading font-bold tracking-tight text-balance">
           Grow Your Business With Us
         </h1>
-        <img src={"./grow_business.png"} alt="Grown Business" />
+        <Image
+          src="/grow_business.png"
+          alt="Grown Business"
+          width={800}
+          height={400}
+          className="w-full h-auto rounded"
+          priority
+        />
         <div className="container space-y-6">
           <h4 className="text-xl font-lato text-brand-text-weak tracking-tight">
             Beautify your website and brand
