@@ -1,4 +1,5 @@
 import HelloBanner from "./_components/HelloBanner";
+import Button from "./_components/ui/Button";
 
 // Here we hardcode the content of the home page, but in a real-world scenario, this content would be fetched from a CMS or a DB.
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
         development, and digital marketing. We create digital experiences that
         are unique to your brand and help you achieve your goals.
       </p>
+      <Button secondary>Book a meeting</Button>
     </main>
   );
 }
