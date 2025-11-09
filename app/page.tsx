@@ -45,18 +45,20 @@ export default function Home() {
       </section>
 
       <section className="space-y-6">
-        <h1 className="container text-3xl font-heading font-bold tracking-tight text-balance">
+        <h1 className="text-3xl font-heading font-bold tracking-tight text-balance">
           Grow Your Business With Us
         </h1>
-        <Image
-          src="/grow_business.png"
-          alt="Grown Business"
-          width={800}
-          height={400}
-          className="w-full h-auto rounded"
-          priority
-        />
-        <div className="container space-y-6">
+        <div className="-mx-8">
+          <Image
+            src="/grow_business.png"
+            alt="Grown Business"
+            width={800}
+            height={400}
+            className="w-full h-auto rounded"
+            priority
+          />
+        </div>
+        <div className="space-y-6">
           <h4 className="text-xl font-lato text-brand-text-weak tracking-tight">
             Beautify your website and brand
           </h4>
