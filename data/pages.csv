@@ -1,0 +1,6 @@
+title,path,include_in_prod
+Home,/,true
+Showcase,/showcase,true
+Blog,/blog,true
+About us,/about,true
+Contact us,/contact,true

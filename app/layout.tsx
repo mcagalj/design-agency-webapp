@@ -4,6 +4,8 @@ import { Inter, Lato } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "./_components/navigation";
 import { AuthProvider } from "./_context/AuthContext";
+import { db } from "@/db";
+import { pages } from "@/db/schema";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,11 +31,19 @@ export const viewport: Viewport = {
   initialScale: 1.0,
 };
 
-export default function RootLayout({
+async function getPages() {
+  const data = await db.select().from(pages);
+  return data;
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pages = await getPages();
+  console.log("Pages from DB:", pages);
+
   return (
     <html lang="en">
       <body
