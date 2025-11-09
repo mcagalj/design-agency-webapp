@@ -4,8 +4,7 @@ import { Inter, Lato } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "./_components/navigation";
 import { AuthProvider } from "./_context/AuthContext";
-import { db } from "@/db";
-import { pages } from "@/db/schema";
+import { getPages } from "@/lib/api/pages";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,11 +30,6 @@ export const viewport: Viewport = {
   initialScale: 1.0,
 };
 
-async function getPages() {
-  const data = await db.select().from(pages);
-  return data;
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -51,7 +45,7 @@ export default async function RootLayout({
       >
         <AuthProvider>
           <header className="fixed top-0 left-0 right-0 z-50 bg-brand-fill-bg border-b border-brand-stroke-weak">
-            <Navigation />
+            <Navigation pages={pages} />
           </header>
           <main className="pt-28">
             <NuqsAdapter>{children}</NuqsAdapter>
