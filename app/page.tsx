@@ -1,8 +1,28 @@
 import HelloBanner from "./_components/HelloBanner";
 import Button from "./_components/ui/Button";
+import Testimonial from "./_components/Testimonial";
 import Image from "next/image";
 
 // Here we hardcode the content of the home page, but in a real-world scenario, this content would be fetched from a CMS or a DB.
+const testimonials = [
+  {
+    image: "/design_system.jpg",
+    buttonText: "Design system",
+  },
+  {
+    image: "/from_scratch.jpg",
+    buttonText: "Design from scratch",
+  },
+  {
+    image: "/brand_transform.jpg",
+    buttonText: "Brand transformation",
+  },
+  {
+    image: "/book_cover.jpg",
+    buttonText: "Book cover design",
+  },
+];
+
 export default function Home() {
   return (
     <main className="container space-y-14 p-8">
@@ -55,6 +75,23 @@ export default function Home() {
           </Button>
         </div>
       </section>
+
+      {/* Testimonials */}
+      <section className="space-y-12">
+        <h1 className="container text-3xl font-lato font-bold tracking-tight text-balance">
+          What Our Customers Say
+        </h1>
+        <h4 className="container text-xl font-lato text-brand-text-weak tracking-tight">
+          Read case studies of our happy customers
+        </h4>
+        {testimonials.map(({ image, buttonText }, index) => (
+          <Testimonial key={index} image={image} buttonText={buttonText} />
+        ))}
+      </section>
+
+      <div className="w-full text-center pb-14">
+        <Button secondary>{`Let's build the future`}</Button>
+      </div>
     </main>
   );
 }
