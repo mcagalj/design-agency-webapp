@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { pages } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 
 export async function getPages() {
   const data = await db
@@ -10,6 +10,7 @@ export async function getPages() {
       path: pages.path,
     })
     .from(pages)
-    .where(eq(pages.includeInProd, true));
+    .where(eq(pages.includeInProd, true))
+    .orderBy(asc(pages.displayOrder), asc(pages.id));
   return data;
 }

@@ -9,7 +9,7 @@ import { cn } from "@/lib/cn";
 import { useAuth } from "../_context/AuthContext";
 import { pages as pagesSchema } from "@/db/schema";
 
-type Page = Omit<typeof pagesSchema.$inferSelect, "includeInProd">;
+type Page = Omit<typeof pagesSchema.$inferSelect, "includeInProd" | "displayOrder">;
 
 /**
  * Render a page list item.
