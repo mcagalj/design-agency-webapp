@@ -9,7 +9,7 @@ import { cn } from "@/lib/cn";
 import { useAuth } from "../_context/AuthContext";
 import { pages as pagesSchema } from "@/db/schema";
 
-type Page = typeof pagesSchema.$inferSelect;
+type Page = Omit<typeof pagesSchema.$inferSelect, "includeInProd">;
 
 /**
  * Render a page list item.
@@ -57,9 +57,6 @@ export function Navigation({ pages }: { pages: Page[] }) {
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const { user, login, logout } = useAuth();
 
-  // Filter pages to include only those marked for production
-  const productionPages = pages.filter((page) => page.includeInProd);
-
   // Demo login handler
   const handleLogin = () => {
     login({ username: "jdoe", email: "jdoe@example.com" });
@@ -72,9 +69,7 @@ export function Navigation({ pages }: { pages: Page[] }) {
       </Link>
       {/* Hidden on mobile */}
       <ul className="hidden md:flex justify-between space-x-4 text-sm uppercase text-brand-text-strong">
-        {productionPages.map((page, index) =>
-          processPage(page, index, currentPath)
-        )}
+        {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
       <div className="flex items-center space-x-4">
         {user ? (
@@ -103,7 +98,7 @@ export function Navigation({ pages }: { pages: Page[] }) {
             { hidden: !isOpen }
           )}
         >
-          {productionPages.map((page, index) =>
+          {pages.map((page, index) =>
             processPage(page, index, currentPath, toggleMenu)
           )}
         </ul>
