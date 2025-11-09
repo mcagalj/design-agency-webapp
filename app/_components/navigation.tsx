@@ -43,9 +43,16 @@ const pages: Page[] = [
  * Render a page list item.
  * @param page - { title, path } for the page
  * @param index - array index used for key
+ * @param currentPath - current pathname to determine active state
+ * @param onClickHandler - optional click handler for closing menu
  * @returns JSX element for a list item
  */
-function processPage(page: Page, index: number, currentPath?: string) {
+function processPage(
+  page: Page,
+  index: number,
+  currentPath?: string,
+  onClickHandler?: () => void
+) {
   // Check if the current path matches the page path
   // For home page ("/"), use exact match to avoid matching all routes
   // For other pages, check if current path starts with the page path to support nested routes
@@ -56,7 +63,7 @@ function processPage(page: Page, index: number, currentPath?: string) {
 
   return (
     <li key={index}>
-      <Link href={page.path}>
+      <Link href={page.path} onClick={onClickHandler}>
         <span
           className={cn(
             "border rounded-sm border-transparent px-4 py-3 whitespace-nowrap hover:text-white hover:bg-brand",
@@ -119,7 +126,9 @@ export function Navigation() {
             { hidden: !isOpen }
           )}
         >
-          {pages.map((page, index) => processPage(page, index, currentPath))}
+          {pages.map((page, index) =>
+            processPage(page, index, currentPath, toggleMenu)
+          )}
         </ul>
       </div>
     </nav>
