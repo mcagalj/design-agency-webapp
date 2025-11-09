@@ -57,6 +57,9 @@ export function Navigation({ pages }: { pages: Page[] }) {
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const { user, login, logout } = useAuth();
 
+  // Filter pages to include only those marked for production
+  const productionPages = pages.filter((page) => page.includeInProd);
+
   // Demo login handler
   const handleLogin = () => {
     login({ username: "jdoe", email: "jdoe@example.com" });
@@ -69,7 +72,9 @@ export function Navigation({ pages }: { pages: Page[] }) {
       </Link>
       {/* Hidden on mobile */}
       <ul className="hidden md:flex justify-between space-x-4 text-sm uppercase text-brand-text-strong">
-        {pages.map((page, index) => processPage(page, index, currentPath))}
+        {productionPages.map((page, index) =>
+          processPage(page, index, currentPath)
+        )}
       </ul>
       <div className="flex items-center space-x-4">
         {user ? (
@@ -98,7 +103,7 @@ export function Navigation({ pages }: { pages: Page[] }) {
             { hidden: !isOpen }
           )}
         >
-          {pages.map((page, index) =>
+          {productionPages.map((page, index) =>
             processPage(page, index, currentPath, toggleMenu)
           )}
         </ul>
