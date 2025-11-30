@@ -15,6 +15,13 @@
       "when": 1762711781992,
       "tag": "0001_panoramic_captain_midlands",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764501507560,
+      "tag": "0002_amazing_the_initiative",
+      "breakpoints": true
     }
   ]
 }
