@@ -110,6 +110,26 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
+
+        {/* Admin Dashboard Link */}
+        <div className="mt-8 p-6 bg-purple-50 border-2 border-purple-300 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-purple-900 mb-2">
+                Admin Dashboard
+              </h3>
+              <p className="text-sm text-purple-700">
+                View all contact form submissions (authentication required)
+              </p>
+            </div>
+            <Link
+              href="/admin/submissions"
+              className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors"
+            >
+              View Submissions →
+            </Link>
+          </div>
+        </div>
       </div>
     </main>
   );

@@ -9,7 +9,10 @@ import { cn } from "@/lib/cn";
 import { useAuth } from "../_context/AuthContext";
 import { pages as pagesSchema } from "@/db/schema";
 
-type Page = Omit<typeof pagesSchema.$inferSelect, "includeInProd" | "displayOrder">;
+type Page = Omit<
+  typeof pagesSchema.$inferSelect,
+  "includeInProd" | "displayOrder"
+>;
 
 /**
  * Render a page list item.
@@ -59,7 +62,7 @@ export function Navigation({ pages }: { pages: Page[] }) {
 
   // Demo login handler
   const handleLogin = () => {
-    login({ username: "jdoe", email: "jdoe@example.com" });
+    login({ username: "admin", email: "admin@example.com" });
   };
 
   return (
