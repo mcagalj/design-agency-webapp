@@ -9,6 +9,8 @@ type ButtonProps = {
   ghost?: boolean;
   className?: string;
   iconClassName?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 };
 
 const Button = ({
@@ -18,9 +20,13 @@ const Button = ({
   onClick,
   secondary,
   ghost,
+  type = "button",
+  disabled = false,
 }: ButtonProps) => {
   return (
     <button
+      type={type}
+      disabled={disabled}
       className={cn(
         "transition duration-300 ease-in-out",
         "group flex items-center space-x-2 max-w-min whitespace-nowrap",
@@ -30,8 +36,10 @@ const Button = ({
           "bg-brand text-white": secondary,
           "border border-brand-stroke-strong bg-brand-fill-bg text-brand-text-weak":
             ghost,
+          "opacity-50 cursor-not-allowed": disabled,
         },
         "hover:opacity-90",
+        disabled && "hover:opacity-50",
         className
       )}
       onClick={onClick}
