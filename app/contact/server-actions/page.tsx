@@ -1,24 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
-import { submitContact } from "@/app/_actions/contact";
+import { submitContact, type ActionState } from "@/app/_actions/contact";
 import Button from "@/app/_components/ui/Button";
 import Link from "next/link";
-
-type ActionState = {
-  success?: boolean;
-  error?: string;
-  message?: string;
-  fieldErrors?: {
-    name?: string;
-    email?: string;
-    message?: string;
-  };
-  data?: {
-    id: number;
-    name: string;
-  };
-};
 
 export default function ServerActionsContactPage() {
   const [state, formAction, isPending] = useActionState<ActionState, FormData>(
@@ -41,11 +26,11 @@ export default function ServerActionsContactPage() {
           </h1>
           <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-4">
             <p className="text-sm font-semibold text-green-700">
-              Server Actions Approach
+              Server Actions Approach with Zod Validation
             </p>
             <p className="text-sm text-green-600 mt-1">
-              This form uses Next.js Server Actions for direct server-side
-              processing.
+              This form uses Next.js Server Actions with Zod schema validation
+              for type-safe, robust data validation.
             </p>
           </div>
         </div>
@@ -188,17 +173,24 @@ export default function ServerActionsContactPage() {
             <li className="flex items-start">
               <span className="mr-2">3.</span>
               <span>
-                Server action validates data and inserts directly into database
+                <code className="bg-gray-200 px-1 rounded">Zod</code> validates
+                and sanitizes data with type-safe schema
               </span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">4.</span>
               <span>
-                No API route needed - direct server-to-database communication
+                Server action inserts validated data directly into database
               </span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">5.</span>
+              <span>
+                No API route needed - direct server-to-database communication
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="mr-2">6.</span>
               <span>Works without JavaScript (progressive enhancement)</span>
             </li>
           </ul>
@@ -211,6 +203,10 @@ export default function ServerActionsContactPage() {
               <li>
                 • <strong>Server Action</strong> - Function marked with 'use
                 server'
+              </li>
+              <li>
+                • <strong>Zod Validation</strong> - Type-safe schema validation
+                with automatic sanitization
               </li>
               <li>
                 • <strong>No API Layer</strong> - Direct function call, no REST
@@ -226,6 +222,34 @@ export default function ServerActionsContactPage() {
               <li>
                 • <strong>Progressive Enhancement</strong> - Works even without
                 JS enabled
+              </li>
+            </ul>
+          </div>
+
+          <div className="mt-6 p-4 bg-blue-50 rounded border-l-4 border-blue-500">
+            <p className="text-sm font-semibold text-blue-900 mb-2">
+              🎯 Zod Benefits:
+            </p>
+            <ul className="text-sm text-blue-800 space-y-1">
+              <li>
+                • <strong>Type Safety</strong> - Full TypeScript inference from
+                schema
+              </li>
+              <li>
+                • <strong>Automatic Sanitization</strong> - trim(),
+                toLowerCase() applied automatically
+              </li>
+              <li>
+                • <strong>Rich Validation</strong> - Email format, length
+                limits, custom rules
+              </li>
+              <li>
+                • <strong>Clear Error Messages</strong> - Descriptive validation
+                errors per field
+              </li>
+              <li>
+                • <strong>Composable</strong> - Easy to extend and refine
+                schemas
               </li>
             </ul>
           </div>
