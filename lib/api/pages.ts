@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { pages } from "@/db/schema";
 import { eq, asc } from "drizzle-orm";
 import cms from "@/cms";
+import { TypeNavigationSkeleton } from "@/cms/content-types";
 
 export async function getPages() {
   const data = await db
@@ -17,11 +18,16 @@ export async function getPages() {
 }
 
 export async function getNavigation() {
-  const data = await cms.getEntries({
+  // Check https://github.com/contentful/contentful.js/blob/master/ADVANCED.md#link-resolution
+  // for more information on "withoutUnresolvableLinks"
+  const data = await cms.withoutUnresolvableLinks.getEntries<TypeNavigationSkeleton>({
     content_type: 'navigation',
     query: 'Main navigation',
     select: ["fields"],
   });
 
-  return data.items[0];
+  const navItems = data.items[0]?.fields?.navItems
+    ?.map(item => item?.fields)
+    .filter(fields => fields != null) || [];
+  return navItems;
 }

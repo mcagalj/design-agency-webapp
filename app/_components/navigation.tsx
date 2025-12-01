@@ -7,12 +7,24 @@ import Hamburger from "./Hamburger";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 import { useAuth } from "../_context/AuthContext";
-import { pages as pagesSchema } from "@/db/schema";
+// import { pages as pagesSchema } from "@/db/schema";
+import { TypeNavItem } from "@/cms/content-types";
 
-type Page = Omit<
-  typeof pagesSchema.$inferSelect,
-  "includeInProd" | "displayOrder"
->;
+// type Page = Omit<
+//   typeof pagesSchema.$inferSelect,
+//   "includeInProd" | "displayOrder"
+// >;
+
+// This is essentially the same as if we had written:
+//
+// type Page = {
+//   title: string;
+//   path: string;
+//   includeInProd?: boolean;
+// };
+//
+// The difference is that the type is generated from the Contentful schema.
+type Page = TypeNavItem<"WITHOUT_UNRESOLVABLE_LINKS">["fields"];
 
 /**
  * Render a page list item.

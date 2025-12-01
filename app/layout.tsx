@@ -38,11 +38,7 @@ export default async function RootLayout({
   const pages = await getPages();
   console.log("Pages from DB:", pages);
 
-  const navigation = await getNavigation();
-  console.log("Navigation from CMS:", navigation);
-  const navigationItems = navigation.fields.navItems?.map(
-    (item) => item.fields
-  );
+  const navigationItems = await getNavigation();
   console.log("Navigation items extracted from CMS:", navigationItems);
 
   return (
