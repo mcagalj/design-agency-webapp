@@ -44,12 +44,25 @@ export async function getNavigation() {
 }
 
 
-export async function getProducts(page: number = 1, pageSize: number = 6) {
+export async function getProducts(
+  page: number = 1,
+  pageSize: number = 6,
+  sortBy: string = 'name'
+) {
   const skip = (page - 1) * pageSize;
+
+  // Map sortBy to Contentful field format
+  // Contentful uses 'fields.fieldName' for ordering
+  // Prefix with '-' for descending order
+  const orderField = sortBy.startsWith('-')
+    ? `-fields.${sortBy.substring(1)}`
+    : `fields.${sortBy}`;
+
   const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>({
     content_type: 'product',
     skip,
     limit: pageSize,
+    order: [orderField] as any,
   });
 
   return data;

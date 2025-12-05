@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getProducts, getProductsCount } from "@/lib/api";
 import { Pagination } from "../_components/Pagination";
+import { ProductSort } from "./_components/ProductSort";
 import { notFound } from "next/navigation";
 import { SearchParams } from "nuqs";
 
@@ -15,9 +16,10 @@ export default async function ProductsPage({
 }: ProductsPageProps) {
   const params = await searchParams;
   const page = typeof params.page === "string" ? parseInt(params.page, 10) : 1;
+  const sortBy = typeof params.sortBy === "string" ? params.sortBy : "name";
 
   const [data, productsCount] = await Promise.all([
-    getProducts(page, PAGE_SIZE),
+    getProducts(page, PAGE_SIZE, sortBy),
     getProductsCount(),
   ]);
 
@@ -39,6 +41,8 @@ export default async function ProductsPage({
             </p>
           </header>
 
+          <ProductSort />
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {data.items.map((product) => (
               <article
@@ -58,9 +62,14 @@ export default async function ProductsPage({
                   />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
-                  <h2 className="text-2xl font-bold mb-3 text-gray-900">
-                    {product.fields.name}
-                  </h2>
+                  <div className="flex justify-between items-start mb-3">
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      {product.fields.name}
+                    </h2>
+                    <p className="text-xl font-semibold text-blue-600 ml-2 whitespace-nowrap">
+                      {product.fields.price} {product.fields.currencyCode}
+                    </p>
+                  </div>
                   <p className="text-gray-600 leading-relaxed flex-grow">
                     {product.fields.description}
                   </p>
