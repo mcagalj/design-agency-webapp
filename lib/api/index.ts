@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { pages } from "@/db/schema";
 import { eq, asc } from "drizzle-orm";
 import cms from "@/cms";
-import { TypeNavigationSkeleton } from "@/cms/content-types";
+import { TypeNavigationSkeleton, TypeProductSkeleton } from "@/cms/content-types";
 
 
 // ===============================
@@ -41,4 +41,13 @@ export async function getNavigation() {
     ?.map(item => item?.fields)
     .filter(fields => fields != null) || [];
   return navItems;
+}
+
+
+export async function getProducts() {
+  const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>({
+    content_type: 'product',
+  });
+
+  return data;
 }
