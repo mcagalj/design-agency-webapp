@@ -4,6 +4,12 @@ import { eq, asc } from "drizzle-orm";
 import cms from "@/cms";
 import { TypeNavigationSkeleton } from "@/cms/content-types";
 
+
+// ===============================
+// Fetching data from a database
+// using Drizzle ORM.
+// (https://drizzle-orm.github.io/drizzle-orm/)
+// -------------------------------
 export async function getPages() {
   const data = await db
     .select({
@@ -17,6 +23,11 @@ export async function getPages() {
   return data;
 }
 
+// =====================================================================================
+// Fetching data from Contentful (a headless CMS) using the 'contentful.js' library.
+// This library is a wrapper around Contentful Delivery REST API.
+// (https://github.com/contentful/contentful.js)
+// -------------------------------------------------------------------------------------
 export async function getNavigation() {
   // Check https://github.com/contentful/contentful.js/blob/master/ADVANCED.md#link-resolution
   // for more information on "withoutUnresolvableLinks"

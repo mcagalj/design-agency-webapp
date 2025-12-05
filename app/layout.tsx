@@ -4,7 +4,7 @@ import { Inter, Lato } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "./_components/navigation";
 import { AuthProvider } from "./_context/AuthContext";
-import { getNavigation, getPages } from "@/lib/api/pages";
+import { getNavigation, getPages } from "@/lib/api";
 
 const inter = Inter({
   subsets: ["latin"],
