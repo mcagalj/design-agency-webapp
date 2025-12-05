@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { getProducts, getProductsCount } from "@/lib/api";
+import { getProducts, getProductsCount, getCategories } from "@/lib/api";
 import { Pagination } from "../_components/Pagination";
 import { ProductSort } from "./_components/ProductSort";
+import { ProductFilters } from "./_components/ProductFilters";
 import { notFound } from "next/navigation";
 import { SearchParams } from "nuqs";
 
@@ -17,10 +18,13 @@ export default async function ProductsPage({
   const params = await searchParams;
   const page = typeof params.page === "string" ? parseInt(params.page, 10) : 1;
   const sortBy = typeof params.sortBy === "string" ? params.sortBy : "name";
+  const categoryId =
+    typeof params.category === "string" ? params.category : undefined;
 
-  const [data, productsCount] = await Promise.all([
-    getProducts(page, PAGE_SIZE, sortBy),
-    getProductsCount(),
+  const [data, productsCount, categories] = await Promise.all([
+    getProducts(page, PAGE_SIZE, sortBy, categoryId),
+    getProductsCount(categoryId),
+    getCategories(),
   ]);
 
   console.log("Total number of products:", productsCount);
@@ -41,6 +45,7 @@ export default async function ProductsPage({
             </p>
           </header>
 
+          <ProductFilters categories={categories} />
           <ProductSort />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -60,6 +65,22 @@ export default async function ProductsPage({
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
+                  {product.fields.categories &&
+                    product.fields.categories.length > 0 && (
+                      <div className="absolute top-3 left-3 flex flex-wrap gap-2">
+                        {product.fields.categories
+                          .filter((category) => category?.fields?.label)
+                          .map((category) => (
+                            <span
+                              key={category!.sys.id}
+                              className="px-3 py-1 bg-blue-600 text-white text-xs font-semibold rounded-full shadow-md"
+                            >
+                              {category!.fields!.label.charAt(0).toUpperCase() +
+                                category!.fields!.label.slice(1)}
+                            </span>
+                          ))}
+                      </div>
+                    )}
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-3">

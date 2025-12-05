@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { pages } from "@/db/schema";
 import { eq, asc } from "drizzle-orm";
 import cms from "@/cms";
-import { TypeNavigationSkeleton, TypeProductSkeleton } from "@/cms/content-types";
+import { TypeNavigationSkeleton, TypeProductSkeleton, TypeCategorySkeleton } from "@/cms/content-types";
 
 
 // ===============================
@@ -43,11 +43,23 @@ export async function getNavigation() {
   return navItems;
 }
 
+export async function getCategories() {
+  const data = await cms.withoutUnresolvableLinks.getEntries<TypeCategorySkeleton>({
+    content_type: 'category',
+    select: ["fields.label", "sys.id"],
+  });
+
+  return data.items.map(item => ({
+    id: item.sys.id,
+    label: item.fields.label,
+  }));
+}
 
 export async function getProducts(
   page: number = 1,
   pageSize: number = 6,
-  sortBy: string = 'name'
+  sortBy: string = 'name',
+  categoryId?: string
 ) {
   const skip = (page - 1) * pageSize;
 
@@ -58,21 +70,36 @@ export async function getProducts(
     ? `-fields.${sortBy.substring(1)}`
     : `fields.${sortBy}`;
 
-  const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>({
+  const query: any = {
     content_type: 'product',
     skip,
     limit: pageSize,
     order: [orderField] as any,
-  });
+  };
+
+  // Add category filter if provided
+  if (categoryId) {
+    query['fields.categories.sys.id'] = categoryId;
+  }
+
+  const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>(query);
 
   return data;
 }
 
-export async function getProductsCount() {
-  const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>({
+export async function getProductsCount(categoryId?: string) {
+  const query: any = {
     content_type: 'product',
     limit: 1,
-  });
+  };
+
+  // Add category filter if provided
+  if (categoryId) {
+    query['fields.categories.sys.id'] = categoryId;
+  }
+
+  const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>(query);
 
   return data.total;
 }
+
