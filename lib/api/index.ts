@@ -44,10 +44,22 @@ export async function getNavigation() {
 }
 
 
-export async function getProducts() {
+export async function getProducts(page: number = 1, pageSize: number = 6) {
+  const skip = (page - 1) * pageSize;
   const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>({
     content_type: 'product',
+    skip,
+    limit: pageSize,
   });
 
   return data;
+}
+
+export async function getProductsCount() {
+  const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>({
+    content_type: 'product',
+    limit: 1,
+  });
+
+  return data.total;
 }

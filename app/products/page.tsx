@@ -1,31 +1,79 @@
 import Image from "next/image";
-import { getProducts } from "@/lib/api";
+import { getProducts, getProductsCount } from "@/lib/api";
+import { Pagination } from "../_components/Pagination";
+import { notFound } from "next/navigation";
+import { SearchParams } from "nuqs";
 
-export default async function ProductsPage() {
-  const data = await getProducts();
-  console.log("Products fetched from CMS:", data);
-  console.log(JSON.stringify(data, null, 2));
+const PAGE_SIZE = parseInt(process.env.PAGE_SIZE || "6", 10);
+
+interface ProductsPageProps {
+  searchParams: Promise<SearchParams>;
+}
+
+export default async function ProductsPage({
+  searchParams,
+}: ProductsPageProps) {
+  const params = await searchParams;
+  const page = typeof params.page === "string" ? parseInt(params.page, 10) : 1;
+
+  const [data, productsCount] = await Promise.all([
+    getProducts(page, PAGE_SIZE),
+    getProductsCount(),
+  ]);
+
+  console.log("Total number of products:", productsCount);
+
+  const totalPages = Math.max(1, Math.ceil(productsCount / PAGE_SIZE));
+  if (page > totalPages) notFound();
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-10">
-      <h1 className="text-6xl font-extrabold tracking-tight">Products</h1>
-      <ul className="w-full space-y-4">
-        {data.items.map((product) => (
-          <li key={product.sys.id}>
-            <h2>{product.fields.name}</h2>
-            <p>{product.fields.description}</p>
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-7xl mx-auto">
+          <header className="text-center mb-12">
+            <h1 className="text-6xl font-extrabold tracking-tight mb-4">
+              Products
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Discover our amazing collection
+            </p>
+          </header>
 
-            <div className="relative w-96 h-60">
-              <Image
-                fill
-                src={`https:${product.fields.heroImage?.fields.file?.url}`}
-                alt={`https:${product.fields.heroImage?.fields.title}`}
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {data.items.map((product) => (
+              <article
+                key={product.sys.id}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col"
+              >
+                <div className="relative w-full h-64 bg-gray-100">
+                  <Image
+                    fill
+                    src={`https:${product.fields.heroImage?.fields.file?.url}`}
+                    alt={
+                      product.fields.heroImage?.fields.title ||
+                      product.fields.name
+                    }
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+                <div className="p-6 flex flex-col flex-grow">
+                  <h2 className="text-2xl font-bold mb-3 text-gray-900">
+                    {product.fields.name}
+                  </h2>
+                  <p className="text-gray-600 leading-relaxed flex-grow">
+                    {product.fields.description}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="flex justify-center">
+            <Pagination currentPage={page} totalPages={totalPages} />
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
