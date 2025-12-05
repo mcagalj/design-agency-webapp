@@ -103,3 +103,8 @@ export async function getProductsCount(categoryId?: string) {
   return data.total;
 }
 
+export async function getProductById(id: string) {
+  const data = await cms.withoutUnresolvableLinks.getEntry<TypeProductSkeleton>(id);
+  return data;
+}
+
