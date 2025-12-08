@@ -32,10 +32,10 @@ export function ProductFilters({ categories }: ProductFiltersProps) {
   };
 
   return (
-    <div className="flex items-center justify-center gap-3 mb-4">
+    <div className="flex items-center gap-3">
       <label
         htmlFor="category-filter"
-        className="text-sm font-medium text-gray-700"
+        className="text-sm font-medium text-gray-700 w-32 text-right"
       >
         Filter by category:
       </label>
@@ -43,7 +43,7 @@ export function ProductFilters({ categories }: ProductFiltersProps) {
         id="category-filter"
         value={categoryId || "all"}
         onChange={handleCategoryChange}
-        className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+        className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm min-w-[200px]"
       >
         <option value="all">All Categories</option>
         {categories.map((category) => (

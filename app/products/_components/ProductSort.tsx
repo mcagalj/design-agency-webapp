@@ -16,10 +16,10 @@ export function ProductSort() {
   };
 
   return (
-    <div className="flex items-center justify-center gap-3 mb-8">
+    <div className="flex items-center gap-3">
       <label
         htmlFor="sort-select"
-        className="text-sm font-medium text-gray-700"
+        className="text-sm font-medium text-gray-700 w-20 text-right"
       >
         Sort by:
       </label>
@@ -27,7 +27,7 @@ export function ProductSort() {
         id="sort-select"
         value={sortBy}
         onChange={handleSortChange}
-        className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+        className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm min-w-[200px]"
       >
         <option value="name">Name (A-Z)</option>
         <option value="-name">Name (Z-A)</option>

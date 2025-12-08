@@ -59,7 +59,8 @@ export async function getProducts(
   page: number = 1,
   pageSize: number = 6,
   sortBy: string = 'name',
-  categoryId?: string
+  categoryId?: string,
+  searchQuery?: string
 ) {
   const skip = (page - 1) * pageSize;
 
@@ -82,12 +83,18 @@ export async function getProducts(
     query['fields.categories.sys.id'] = categoryId;
   }
 
+  // Add search query if provided
+  // Contentful's query parameter searches across all text fields
+  if (searchQuery && searchQuery.trim()) {
+    query.query = searchQuery.trim();
+  }
+
   const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>(query);
 
   return data;
 }
 
-export async function getProductsCount(categoryId?: string) {
+export async function getProductsCount(categoryId?: string, searchQuery?: string) {
   const query: any = {
     content_type: 'product',
     limit: 1,
@@ -96,6 +103,11 @@ export async function getProductsCount(categoryId?: string) {
   // Add category filter if provided
   if (categoryId) {
     query['fields.categories.sys.id'] = categoryId;
+  }
+
+  // Add search query if provided
+  if (searchQuery && searchQuery.trim()) {
+    query.query = searchQuery.trim();
   }
 
   const data = await cms.withoutUnresolvableLinks.getEntries<TypeProductSkeleton>(query);
