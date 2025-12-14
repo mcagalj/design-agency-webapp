@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Logo from "./Logo";
 import Hamburger from "./Hamburger";
 import { useState } from "react";
@@ -68,12 +68,14 @@ function processPage(
 
 export function Navigation({ pages }: { pages: Page[] }) {
   const currentPath = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const { data: session } = authClient.useSession();
 
   const handleLogout = async () => {
     await authClient.signOut();
+    router.refresh();
   };
 
   return (
