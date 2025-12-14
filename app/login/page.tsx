@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth/auth-client";
 import Button from "@/app/_components/ui/Button";
 import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -31,8 +33,8 @@ export default function LoginPage() {
       }
 
       if (data) {
-        // Redirect to dashboard or home page after successful login
-        router.push("/");
+        // Redirect to callback URL or home page after successful login
+        router.push(callbackUrl);
       }
     } catch (err) {
       setError("An unexpected error occurred");

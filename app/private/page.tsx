@@ -8,7 +8,7 @@ export default async function PrivatePage() {
   });
 
   if (!session) {
-    redirect("/login");
+    redirect("/login?callbackUrl=/private");
   }
 
   return (
