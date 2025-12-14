@@ -3,7 +3,6 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Inter, Lato } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "./_components/navigation";
-import { AuthProvider } from "./_context/AuthContext";
 import { getNavigation, getPages } from "@/lib/api";
 
 const inter = Inter({
@@ -46,14 +45,12 @@ export default async function RootLayout({
       <body
         className={`${inter.className} ${inter.variable} ${lato.variable} antialiased bg-brand-fill-bg`}
       >
-        <AuthProvider>
-          <header className="fixed top-0 left-0 right-0 z-50 bg-brand-fill-bg border-b border-brand-stroke-weak">
-            <Navigation pages={navigationItems} />
-          </header>
-          <main className="pt-28">
-            <NuqsAdapter>{children}</NuqsAdapter>
-          </main>
-        </AuthProvider>
+        <header className="fixed top-0 left-0 right-0 z-50 bg-brand-fill-bg border-b border-brand-stroke-weak">
+          <Navigation pages={navigationItems} />
+        </header>
+        <main className="pt-28">
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </main>
       </body>
     </html>
   );

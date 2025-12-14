@@ -6,7 +6,7 @@ import Logo from "./Logo";
 import Hamburger from "./Hamburger";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import { useAuth } from "../_context/AuthContext";
+import { authClient } from "@/lib/auth/auth-client";
 // import { pages as pagesSchema } from "@/db/schema";
 import { TypeNavItem } from "@/cms/content-types";
 
@@ -70,11 +70,10 @@ export function Navigation({ pages }: { pages: Page[] }) {
   const currentPath = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((prev) => !prev);
-  const { user, login, logout } = useAuth();
+  const { data: session } = authClient.useSession();
 
-  // Demo login handler
-  const handleLogin = () => {
-    login({ username: "admin", email: "admin@example.com" });
+  const handleLogout = async () => {
+    await authClient.signOut();
   };
 
   return (
@@ -87,23 +86,25 @@ export function Navigation({ pages }: { pages: Page[] }) {
         {pages.map((page, index) => processPage(page, index, currentPath))}
       </ul>
       <div className="flex items-center space-x-4">
-        {user ? (
+        {session ? (
           <>
-            <span className="text-normal text-brand">{user.username}</span>
+            <span className="text-normal text-brand">
+              {session.user.name || session.user.email}
+            </span>
             <button
               className="px-2 py-2 uppercase text-normal rounded bg-brand text-white hover:bg-brand-stroke-strong"
-              onClick={logout}
+              onClick={handleLogout}
             >
               Logout
             </button>
           </>
         ) : (
-          <button
+          <Link
+            href="/login"
             className="px-2 py-2 uppercase text-normal rounded bg-brand text-white hover:bg-brand-stroke-strong"
-            onClick={handleLogin}
           >
             Login
-          </button>
+          </Link>
         )}
         {/* Visible on mobile */}
         <Hamburger isOpen={isOpen} onClick={toggleMenu} />

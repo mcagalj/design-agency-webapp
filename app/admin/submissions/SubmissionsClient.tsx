@@ -1,7 +1,8 @@
 "use client";
 
-import { useAuth } from "@/app/_context/AuthContext";
+import { authClient } from "@/lib/auth/auth-client";
 import Button from "@/app/_components/ui/Button";
+import Link from "next/link";
 
 type Submission = {
   id: number;
@@ -18,18 +19,10 @@ type SubmissionsClientProps = {
 export default function SubmissionsClient({
   submissions,
 }: SubmissionsClientProps) {
-  const { user, login } = useAuth();
-
-  // Mock login for demo purposes
-  const handleMockLogin = () => {
-    login({
-      username: "admin",
-      email: "admin@example.com",
-    });
-  };
+  const { data: session } = authClient.useSession();
 
   // Show login prompt if not authenticated
-  if (!user) {
+  if (!session) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-10">
         <div className="w-full max-w-md text-center">
@@ -39,18 +32,9 @@ export default function SubmissionsClient({
           <p className="text-gray-600 mb-8">
             Please log in to view contact submissions.
           </p>
-          <div className="p-6 bg-yellow-50 border-l-4 border-yellow-500 rounded mb-8">
-            <p className="text-sm font-semibold text-yellow-700 mb-2">
-              Mock Authentication Demo
-            </p>
-            <p className="text-sm text-yellow-600">
-              Click the button below to simulate login. In production, this
-              would be a real authentication system.
-            </p>
-          </div>
-          <Button onClick={handleMockLogin} className="mx-auto">
-            Login as Admin
-          </Button>
+          <Link href="/login">
+            <Button className="mx-auto">Go to Login</Button>
+          </Link>
         </div>
       </main>
     );
@@ -65,7 +49,7 @@ export default function SubmissionsClient({
               Contact Submissions
             </h1>
             <p className="text-gray-600">
-              Viewing as: <strong>{user.email}</strong>
+              Viewing as: <strong>{session.user.email}</strong>
             </p>
           </div>
           <div className="bg-green-50 border-l-4 border-green-500 p-4">
